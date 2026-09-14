@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Settings | Peapoll{% endblock %}
+
+{% block content %}
+<div class="auth-card settings-card">
+    <h1 class="auth-title">Account Settings</h1>
+    <p class="auth-subtitle">Update your profile or change your password</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h2 class="settings-section-title">Profile Info</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ profile_form.username.id_for_label }}">Username</label>
+            {{ profile_form.username }}
+            {% if profile_form.username.errors %}
+                <div class="field-error">{{ profile_form.username.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ profile_form.email.id_for_label }}">Email</label>
+            {{ profile_form.email }}
+            {% if profile_form.email.errors %}
+                <div class="field-error">{{ profile_form.email.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" name="update_profile" class="btn btn-primary">Save Changes</button>
+    </form>
+
+    <hr class="settings-divider">
+
+    <h2 class="settings-section-title">Change Password</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ password_form.old_password.id_for_label }}">Current Password</label>
+            {{ password_form.old_password }}
+            {% if password_form.old_password.errors %}
+                <div class="field-error">{{ password_form.old_password.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ password_form.new_password1.id_for_label }}">New Password</label>
+            {{ password_form.new_password1 }}
+            {% if password_form.new_password1.errors %}
+                <div class="field-error">{{ password_form.new_password1.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ password_form.new_password2.id_for_label }}">Confirm New Password</label>
+            {{ password_form.new_password2 }}
+            {% if password_form.new_password2.errors %}
+                <div class="field-error">{{ password_form.new_password2.errors|striptags }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" name="change_password" class="btn btn-primary">Change Password</button>
+    </form>
+
+    <p class="auth-footer">
+        <a href="{% url 'accounts:profile' %}">Back to Profile</a>
+    </p>
+</div>
+{% endblock %}

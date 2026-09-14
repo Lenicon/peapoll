@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Profile | Peapoll{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <h1 class="auth-title">Your Profile</h1>
+    <p class="auth-subtitle">Your account information</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="profile-field">
+        <span class="profile-label">Username</span>
+        <span class="profile-value">{{ user.username }}</span>
+    </div>
+
+    <div class="profile-field">
+        <span class="profile-label">Email</span>
+        <span class="profile-value">{{ user.email }}</span>
+    </div>
+
+    <a href="{% url 'accounts:settings' %}" class="btn btn-primary">Edit Profile</a>
+
+    <p class="auth-footer">
+        <a href="{% url 'home:home' %}">Back to Home</a>
+    </p>
+</div>
+{% endblock %}
