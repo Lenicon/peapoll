@@ -1,3 +1,4 @@
 peapoll/db.sqlite3
-.venv/
+peapoll/.venv/
 peapoll/.env
+.vscode/
