@@ -2,3 +2,5 @@ peapoll/db.sqlite3
 .venv/
 peapoll/.env
 .vscode/
+__pycache__/
+*.pyc
