@@ -16,11 +16,40 @@
     </p>
     {% if poll.description %}<p class="poll-description">{{ poll.description|linebreaksbr }}</p>{% endif %}
 
-    <ul class="choice-list">
-        {% for choice in choices %}
-        <li class="choice-item">{{ choice.text }}</li>
+    {% if show_results %}
+    <div class="results">
+        {% for r in results %}
+        <div class="result-row">
+            <div class="result-label">
+                <span>{{ r.choice.text }}</span>
+                <span>{{ r.votes }} vote{{ r.votes|pluralize }} &middot; {{ r.percent }}%</span>
+            </div>
+            <div class="result-track"><div class="result-bar" style="width: {{ r.percent }}%"></div></div>
+        </div>
         {% endfor %}
-    </ul>
+        <p class="result-total">{{ total_votes }} total vote{{ total_votes|pluralize }}</p>
+        {% if has_voted %}<p class="result-note">You voted in this poll.</p>{% endif %}
+    </div>
+    {% if poll.is_open and not has_voted %}
+    <p class="auth-footer"><a href="{{ poll.get_absolute_url }}">Back to voting</a></p>
+    {% endif %}
+    {% else %}
+    <form method="post" action="{% url 'polls:vote' poll.pk %}">
+        {% csrf_token %}
+        <ul class="choice-list">
+            {% for choice in choices %}
+            <li>
+                <label class="choice-item choice-option">
+                    <input type="radio" name="choice" value="{{ choice.pk }}" required>
+                    {{ choice.text }}
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="submit" class="btn btn-primary">Vote</button>
+    </form>
+    <p class="auth-footer"><a href="?results=1">See results</a></p>
+    {% endif %}
 
     <p class="auth-footer"><a href="{% url 'polls:list' %}">Back to all polls</a></p>
 </div>

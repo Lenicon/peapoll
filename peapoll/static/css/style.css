@@ -425,3 +425,60 @@ textarea.form-control {
     font-family: inherit;
     resize: vertical;
 }
+
+/* Voting + results */
+.choice-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.choice-option:hover {
+    border-color: var(--primary);
+    background: var(--bg);
+}
+
+.result-row {
+    margin-bottom: 14px;
+}
+
+.result-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.result-label span:last-child {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.result-track {
+    background: var(--border);
+    border-radius: 999px;
+    height: 12px;
+    overflow: hidden;
+}
+
+.result-bar {
+    background: var(--primary);
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+.result-total,
+.result-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 4px 0;
+}
+
+.result-note {
+    color: var(--success-text);
+    font-weight: 600;
+}
