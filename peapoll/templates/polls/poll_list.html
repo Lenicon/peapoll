@@ -12,6 +12,8 @@
         {% endfor %}
     {% endif %}
 
+    <p><a href="{% url 'polls:create' %}" class="btn btn-primary btn-inline">+ Create a poll</a></p>
+
     <form method="get" class="poll-toolbar">
         <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search polls...">
         <select name="sort" class="form-control">

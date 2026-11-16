@@ -410,3 +410,18 @@ body {
     margin-bottom: 8px;
     font-size: 14px;
 }
+
+.btn-inline {
+    width: auto;
+}
+
+.help-text {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+textarea.form-control {
+    font-family: inherit;
+    resize: vertical;
+}

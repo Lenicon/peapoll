@@ -1,7 +1,10 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
+from .forms import PollForm
 from .models import Poll
 
 
@@ -36,3 +39,14 @@ def poll_detail(request, pk):
         'poll': poll,
         'choices': poll.choices.all(),
     })
+
+
+@login_required
+def poll_create(request):
+    """Create a new public poll (registered users only)."""
+    form = PollForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        poll = form.save(owner=request.user)
+        messages.success(request, 'Your poll is live!')
+        return redirect(poll)
+    return render(request, 'polls/poll_form.html', {'form': form})
