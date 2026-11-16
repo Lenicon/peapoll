@@ -16,6 +16,7 @@
                 <a href="{% url 'polls:list' %}">Polls</a>
                 {% if user.is_authenticated %}
                 <a href="{% url 'polls:create' %}">New Poll</a>
+                <a href="{% url 'polls:mine' %}">My Polls</a>
                 <a href="{% url 'accounts:profile' %}">Profile</a>
                 <a href="{% url 'accounts:settings' %}">Settings</a>
                 <a href="{% url 'accounts:logout' %}">Log Out</a>

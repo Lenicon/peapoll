@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}My Polls | Peapoll{% endblock %}
+
+{% block content %}
+<div class="wide-card">
+    <h1 class="auth-title">My Polls</h1>
+    <p class="auth-subtitle">Manage the polls you created</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <p><a href="{% url 'polls:create' %}" class="btn btn-primary btn-inline">+ Create a poll</a></p>
+
+    {% for poll in polls %}
+    <div class="poll-card manage-card">
+        <a href="{{ poll.get_absolute_url }}" class="manage-info">
+            <span class="poll-card-question">{{ poll.question }}</span>
+            <span class="poll-card-meta">
+                {{ poll.created_at|date:"M j, Y" }} &middot; {{ poll.vote_count }} vote{{ poll.vote_count|pluralize }}
+                {% if poll.is_open %}<span class="badge badge-open">Open</span>
+                {% else %}<span class="badge badge-closed">Closed</span>{% endif %}
+            </span>
+        </a>
+        <div class="manage-actions">
+            <form method="post" action="{% url 'polls:toggle' poll.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary btn-small">
+                    {% if poll.is_closed %}Reopen{% else %}Close{% endif %}
+                </button>
+            </form>
+            <form method="post" action="{% url 'polls:delete' poll.pk %}"
+                  onsubmit="return confirm('Delete this poll and all of its votes?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-small">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p class="empty-state">You haven't created any polls yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

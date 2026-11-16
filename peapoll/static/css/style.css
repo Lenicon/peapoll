@@ -482,3 +482,41 @@ textarea.form-control {
     color: var(--success-text);
     font-weight: 600;
 }
+
+/* My Polls */
+.manage-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.manage-card:hover {
+    background: var(--card-bg);
+    border-color: var(--border);
+}
+
+.manage-info {
+    flex: 1;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.manage-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-danger {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+}
+
+.btn-danger:hover {
+    background-color: #fbd5d5;
+}
+
+.badge-open {
+    background: var(--success-bg);
+    color: var(--success-text);
+}

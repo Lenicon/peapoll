@@ -121,3 +121,39 @@ def poll_create(request):
         messages.success(request, 'Your poll is live!')
         return redirect(poll)
     return render(request, 'polls/poll_form.html', {'form': form})
+
+
+@login_required
+def my_polls(request):
+    """Polls created by the logged-in user, with management actions."""
+    polls = (
+        Poll.objects.filter(owner=request.user)
+        .annotate(vote_count=Count('votes'))
+        .order_by('-created_at')
+    )
+    return render(request, 'polls/my_polls.html', {'polls': polls})
+
+
+def _get_owned_poll(request, pk):
+    """Fetch a poll only if the current user owns it, otherwise 404."""
+    return get_object_or_404(Poll, pk=pk, owner=request.user)
+
+
+@login_required
+@require_POST
+def poll_toggle(request, pk):
+    """Close an open poll or reopen a closed one."""
+    poll = _get_owned_poll(request, pk)
+    poll.is_closed = not poll.is_closed
+    poll.save(update_fields=['is_closed'])
+    messages.success(request, 'Poll closed.' if poll.is_closed else 'Poll reopened.')
+    return redirect('polls:mine')
+
+
+@login_required
+@require_POST
+def poll_delete(request, pk):
+    poll = _get_owned_poll(request, pk)
+    poll.delete()
+    messages.success(request, 'Poll deleted.')
+    return redirect('polls:mine')
