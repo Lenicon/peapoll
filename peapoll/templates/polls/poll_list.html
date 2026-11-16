@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Polls | Peapoll{% endblock %}
+
+{% block content %}
+<div class="wide-card">
+    <h1 class="auth-title">Public Polls</h1>
+    <p class="auth-subtitle">Browse every poll on Peapoll</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="get" class="poll-toolbar">
+        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search polls...">
+        <select name="sort" class="form-control">
+            <option value="new" {% if sort == 'new' %}selected{% endif %}>Newest</option>
+            <option value="popular" {% if sort == 'popular' %}selected{% endif %}>Most votes</option>
+        </select>
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
+
+    {% include "polls/_poll_cards.html" with polls=page %}
+
+    {% if page.has_other_pages %}
+    <div class="pagination">
+        {% if page.has_previous %}
+        <a href="?q={{ query|urlencode }}&sort={{ sort }}&page={{ page.previous_page_number }}">&laquo; Prev</a>
+        {% endif %}
+        <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+        {% if page.has_next %}
+        <a href="?q={{ query|urlencode }}&sort={{ sort }}&page={{ page.next_page_number }}">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

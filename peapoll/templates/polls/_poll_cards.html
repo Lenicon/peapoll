@@ -1,0 +1,12 @@
+{% for poll in polls %}
+<a href="{{ poll.get_absolute_url }}" class="poll-card">
+    <span class="poll-card-question">{{ poll.question }}</span>
+    <span class="poll-card-meta">
+        by {{ poll.owner.username }} &middot; {{ poll.created_at|date:"M j, Y" }}
+        &middot; {{ poll.vote_count }} vote{{ poll.vote_count|pluralize }}
+        {% if not poll.is_open %}<span class="badge badge-closed">Closed</span>{% endif %}
+    </span>
+</a>
+{% empty %}
+<p class="empty-state">No polls yet. Be the first to create one!</p>
+{% endfor %}

@@ -285,3 +285,128 @@ body {
     border-top: 1px solid var(--border);
     margin: 28px 0;
 }
+
+/* Polls */
+.wide-card {
+    background: var(--card-bg);
+    padding: 36px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 680px;
+}
+
+.page-wrapper {
+    min-height: calc(100vh - 56px);
+}
+
+.section-heading {
+    text-align: left;
+    font-size: 15px;
+    margin: 32px 0 12px;
+}
+
+.home-actions {
+    margin-bottom: 8px;
+}
+
+.poll-card {
+    display: block;
+    text-align: left;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.poll-card:hover {
+    border-color: var(--primary);
+    background: var(--bg);
+}
+
+.poll-card-question {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.poll-card-meta {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+.badge-closed {
+    background: var(--error-bg);
+    color: var(--error-text);
+}
+
+.empty-state {
+    color: var(--muted);
+    font-size: 14px;
+    padding: 20px 0;
+}
+
+.poll-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.poll-toolbar select {
+    width: auto;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.pagination a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.poll-title {
+    text-align: left;
+}
+
+.wide-card .auth-subtitle {
+    text-align: left;
+}
+
+.poll-description {
+    color: var(--text);
+    font-size: 14px;
+    margin: 0 0 20px;
+}
+
+.choice-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+}
+
+.choice-item {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}

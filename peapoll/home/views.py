@@ -1,12 +1,17 @@
-from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import render
 
+from polls.models import Poll
 
-@login_required
+
 def home_view(request):
     """
-    Handles the Home screen.
-    Only accessible to logged-in users (redirects to Login otherwise,
-    handled automatically by the @login_required decorator).
+    Public Home screen: landing banner plus the latest polls.
+    Anyone can see it; logging in is only needed to create polls.
     """
-    return render(request, 'home/home.html')
+    latest = (
+        Poll.objects.select_related('owner')
+        .annotate(vote_count=Count('votes'))
+        .order_by('-created_at')[:5]
+    )
+    return render(request, 'home/home.html', {'latest_polls': latest})

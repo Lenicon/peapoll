@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ poll.question }} | Peapoll{% endblock %}
+
+{% block content %}
+<div class="wide-card">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h1 class="auth-title poll-title">{{ poll.question }}</h1>
+    <p class="auth-subtitle">
+        by {{ poll.owner.username }} &middot; {{ poll.created_at|date:"M j, Y" }}
+        {% if not poll.is_open %}<span class="badge badge-closed">Closed</span>{% endif %}
+    </p>
+    {% if poll.description %}<p class="poll-description">{{ poll.description|linebreaksbr }}</p>{% endif %}
+
+    <ul class="choice-list">
+        {% for choice in choices %}
+        <li class="choice-item">{{ choice.text }}</li>
+        {% endfor %}
+    </ul>
+
+    <p class="auth-footer"><a href="{% url 'polls:list' %}">Back to all polls</a></p>
+</div>
+{% endblock %}

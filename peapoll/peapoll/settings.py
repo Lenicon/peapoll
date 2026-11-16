@@ -146,7 +146,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Auth redirect settings
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'home:home'
-LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGOUT_REDIRECT_URL = 'home:home'
 
 
 # Email

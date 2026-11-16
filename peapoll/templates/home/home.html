@@ -5,5 +5,11 @@
 <div class="home-card">
     <h1 class="home-title">PEAPOLL</h1>
     <h2 class="home-subtitle">It's a free-for-all in voting!</h2>
+    <div class="home-actions">
+        <a href="{% url 'polls:list' %}" class="btn btn-secondary">Browse polls</a>
+    </div>
+
+    <h3 class="section-heading">Latest polls</h3>
+    {% include "polls/_poll_cards.html" with polls=latest_polls %}
 </div>
 {% endblock %}
