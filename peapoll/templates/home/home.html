@@ -2,14 +2,31 @@
 {% block title %}Home | Peapoll{% endblock %}
 
 {% block content %}
-<div class="home-card">
-    <h1 class="home-title">PEAPOLL</h1>
-    <h2 class="home-subtitle">It's a free-for-all in voting!</h2>
-    <div class="home-actions">
-        <a href="{% url 'polls:list' %}" class="btn btn-secondary">Browse polls</a>
-    </div>
+<div class="home-layout">
+    <!-- Hero Section -->
+    <section class="home-hero">
+        <div class="hero-badge">Community Voting</div>
+        <h1 class="home-title">PEAPOLL</h1>
+        <p class="home-subtitle">It's a free-for-all in voting! Ask a question, share a link, and watch the results roll in.</p>
+        
+        <div class="home-actions">
+            <a href="{% url 'polls:list' %}" class="btn btn-primary btn-inline">Browse all polls</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'polls:create' %}" class="btn btn-secondary">Create a poll</a>
+            {% endif %}
+        </div>
+    </section>
 
-    <h3 class="section-heading">Latest polls</h3>
-    {% include "polls/_poll_cards.html" with polls=latest_polls %}
+    <!-- Latest Polls Feed -->
+    <section class="home-feed">
+        <div class="section-header">
+            <h3 class="section-heading">Latest polls</h3>
+            <a href="{% url 'polls:list' %}" class="section-link">View all &rarr;</a>
+        </div>
+        
+        <div class="poll-grid">
+            {% include "polls/_poll_cards.html" with polls=latest_polls %}
+        </div>
+    </section>
 </div>
 {% endblock %}
