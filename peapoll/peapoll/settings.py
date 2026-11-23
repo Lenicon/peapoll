@@ -165,3 +165,6 @@ if 'test' in sys.argv:
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'test.sqlite3',
     }
+
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
