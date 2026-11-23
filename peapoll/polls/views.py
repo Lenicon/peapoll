@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Subquery
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -54,6 +54,11 @@ def poll_detail(request, pk):
     and the live results to everyone else (already voted, closed, or ?results=1).
     """
     poll = get_object_or_404(Poll.objects.select_related('owner'), pk=pk)
+    voter = _voter_filter(request)
+    user_vote = (
+        poll.votes.filter(**voter).select_related('choice').first()
+        if voter else None
+    )
     has_voted = _has_voted(request, poll)
     show_results = has_voted or not poll.is_open or request.GET.get('results') == '1'
 
@@ -69,6 +74,8 @@ def poll_detail(request, pk):
         'poll': poll,
         'choices': poll.choices.all(),
         'has_voted': has_voted,
+        'user_choice_id': user_vote.choice_id if user_vote else None,
+        'picked_choice': user_vote.choice if user_vote else None,
         'show_results': show_results,
         'results': results,
         'total_votes': poll.votes.count(),
@@ -157,3 +164,14 @@ def poll_delete(request, pk):
     poll.delete()
     messages.success(request, 'Poll deleted.')
     return redirect('polls:mine')
+
+
+def my_voted_polls(request):
+    voter = _voter_filter(request)
+    votes = (
+        Vote.objects.filter(**voter)
+        .select_related('poll', 'poll__owner', 'choice')
+        .order_by('-created_at')
+        if voter else Vote.objects.none()
+    )
+    return render(request, 'polls/my_voted_polls.html', {'votes': votes})

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}My Voted Polls | Peapoll{% endblock %}
+
+{% block content %}
+<div class="wide-card">
+    <h1 class="auth-title">Polls I've Voted In</h1>
+    <p class="auth-subtitle">Polls where you have already cast a vote on Peapoll</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <p><a href="{% url 'polls:list' %}" class="btn btn-primary btn-inline">Browse polls</a></p>
+
+    {% for vote in votes %}
+        <a href="{% url 'polls:detail' vote.poll.pk %}" class="poll-card">
+            <span class="poll-card-question">{{ vote.poll.question }}</span>
+            <span class="poll-card-meta">
+                {% if vote.poll.is_open %}
+                    <span class="badge badge-open">Open</span>
+                {% else %}
+                    <span class="badge badge-closed">Closed</span>
+                {% endif %}
+                <span>You picked: <strong>{{ vote.choice.text }}</strong></span>
+                <span>&middot;</span>
+                <span>Voted {{ vote.created_at|date:"M j, Y" }}</span>
+                <span>&middot;</span>
+                <span>by {{ vote.poll.owner.username }}</span>
+            </span>
+        </a>
+    {% empty %}
+        <div class="empty-state">You haven't voted in any polls yet.</div>
+    {% endfor %}
+</div>
+{% endblock %}

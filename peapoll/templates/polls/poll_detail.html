@@ -21,14 +21,25 @@
         {% for r in results %}
         <div class="result-row">
             <div class="result-label">
-                <span>{{ r.choice.text }}</span>
+                <span>
+                    {{ r.choice.text }}
+                    {% if r.choice.id == user_choice_id %}
+                        <span class="badge">Your vote</span>
+                    {% endif %}
+                </span>
                 <span>{{ r.votes }} vote{{ r.votes|pluralize }} &middot; {{ r.percent }}%</span>
             </div>
-            <div class="result-track"><div class="result-bar" style="width: {{ r.percent }}%"></div></div>
+            <div class="result-track">
+                <progress class="result-bar" max="100" value="{{ r.percent }}" aria-label="{{ r.choice.text }}"></progress>
+            </div>
         </div>
         {% endfor %}
         <p class="result-total">{{ total_votes }} total vote{{ total_votes|pluralize }}</p>
-        {% if has_voted %}<p class="result-note">You voted in this poll.</p>{% endif %}
+        {% if has_voted %}
+            <p class="result-note">
+                You voted in this poll{% if picked_choice %} &mdash; you picked <strong>{{ picked_choice.text }}</strong>{% endif %}.
+            </p>
+        {% endif %}
     </div>
     {% if poll.is_open and not has_voted %}
     <p class="auth-footer"><a href="{{ poll.get_absolute_url }}">Back to voting</a></p>
