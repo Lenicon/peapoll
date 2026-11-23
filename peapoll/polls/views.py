@@ -10,6 +10,28 @@ from .forms import PollForm
 from .models import Choice, Poll, Vote
 
 
+import re
+
+
+def _format_sql(sql: str) -> str:
+    """Break major SQL clauses onto separate lines for easier console reading."""
+    formatted = re.sub(
+        r'\s+(SELECT|FROM|INNER JOIN|LEFT OUTER JOIN|WHERE|AND|OR|GROUP BY|ORDER BY|LIMIT)\s+',
+        r'\n\1 ',
+        sql.strip(),
+        flags=re.IGNORECASE,
+    )
+    return formatted
+
+
+def _log_sql(label: str, queryset) -> None:
+    sql_str = str(queryset.query)
+    print(f"\n========== {label} ==========")
+    print(_format_sql(sql_str))
+    print("=" * (len(label) + 22) + "\n")
+
+
+
 def poll_list(request):
     """Public list of all polls, with search and sorting. No login needed."""
     query = request.GET.get('q', '').strip()
@@ -25,6 +47,8 @@ def poll_list(request):
     else:
         sort = 'new'
         polls = polls.order_by('-created_at')
+
+    _log_sql("poll_list JOIN SQL", polls)
 
     page = Paginator(polls, 10).get_page(request.GET.get('page'))
     return render(request, 'polls/poll_list.html', {
@@ -168,10 +192,21 @@ def poll_delete(request, pk):
 
 def my_voted_polls(request):
     voter = _voter_filter(request)
-    votes = (
-        Vote.objects.filter(**voter)
-        .select_related('poll', 'poll__owner', 'choice')
-        .order_by('-created_at')
-        if voter else Vote.objects.none()
-    )
-    return render(request, 'polls/my_voted_polls.html', {'votes': votes})
+    if voter:
+        base_votes = Vote.objects.filter(**voter)
+        voted_poll_ids = base_votes.values('poll_id')
+        voted_polls_qs = Poll.objects.filter(id__in=Subquery(voted_poll_ids)).order_by('-created_at')
+        _log_sql("my_voted_polls Subquery SQL", voted_polls_qs)
+        votes = (
+            base_votes
+            .select_related('poll', 'poll__owner', 'choice')
+            .order_by('-created_at')
+        )
+    else:
+        _log_sql("my_voted_polls Subquery SQL (empty)", Poll.objects.none())
+        votes = Vote.objects.none()
+
+
+    return render(request, 'polls/my_voted_polls.html', {
+        'votes': votes,
+    })
